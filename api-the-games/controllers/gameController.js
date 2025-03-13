@@ -6,10 +6,10 @@ const getAllGames = async (req, res) => {
   try {
     const games = await gameService.getAll();
     // Requisição feita com sucesso - Cod. 200 (OK)
-    res.status(200).json({games: games });
+    res.status(200).json({ games: games });
   } catch (error) {
     console.log(error);
-    res.status(500).json({message: "Erro interno do servidor." });
+    res.status(500).json({ message: "Erro interno do servidor." });
   }
 };
 
@@ -23,10 +23,10 @@ const createGame = async (req, res) => {
     const { title, platform, year, price } = req.body;
     // Cadastrando no banco
     await gameService.Create(title, platform, year, price);
-    res.sendStatus(201).json({message: "Jogo cadastrado com sucesso"}); // Código 201 (CREATED)
+    res.status(201).json({ message: "Jogo cadastrado com sucesso" }); // Código 201 (CREATED)
   } catch (error) {
     console.log(error);
-    res.status(500).json({message: "Erro interno do servidor." });
+    res.status(500).json({ message: "Erro interno do servidor." });
   }
 };
 
@@ -43,7 +43,48 @@ const deleteGame = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({message: "Erro interno do servidor." });
+    res.status(500).json({ message: "Erro interno do servidor." });
   }
 };
-export default { getAllGames, createGame, deleteGame };
+
+// Função para alterar um jogo
+const updateGame = async (req, res) => {
+  try {
+    if (ObjectId.isValid(req.params.id)) {
+      const id = req.params.id;
+      // Desestruturação
+      //const title = req.body.title
+      const { title, platform, year, price } = req.body;
+      gameService.Update(id, title, platform, year, price);
+      res.sendStatus(200); // Código 200 (OK): Requisição bem sucedida
+    } else {
+      res.sendStatus(400); // Código 400 (Bad Request): Requisição mal formada
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Erro interno do servidor." });
+  }
+
+};
+
+// Função para buscar um único jogo
+const getOneGame = async (req,res) => {
+  try {
+    if(ObjectId.isValid(req.params.id)){
+      const id = req.params.id
+      const game = await gameService.getOne(id)
+      if(!game) {
+        res.sendStatus(404) // Código 404: NOT FOUND - Não encontrado
+      } else {
+        res.status(200).json({ game })
+      }
+    } else {
+      res.sendStatus(400) // Código 400: Bad Request
+    }
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500) // Erro interno do servidor
+  }
+}
+
+export default { getAllGames, createGame, deleteGame, updateGame, getOneGame };
