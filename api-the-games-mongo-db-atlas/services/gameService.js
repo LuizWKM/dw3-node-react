@@ -26,7 +26,7 @@ class gameService {
         title,
         year,
         price,
-        descriptions,
+        descriptions
       });
       // Método do mongoose para cadastrar .save()
       await newGame.save();
