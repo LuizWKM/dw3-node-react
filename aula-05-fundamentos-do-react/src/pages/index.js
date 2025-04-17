@@ -1,6 +1,7 @@
 import Counter from "@/components/Counter";
 import Descriptions from "@/components/Descriptions";
 import Dog from "@/components/Dog";
+import TaskList from "@/components/TaskList";
 import Parent from "@/components/Parent";
 import User from "@/components/User";
 import Welcome from "@/components/Welcome";
@@ -32,10 +33,39 @@ export default function Home() {
         <Dog name="Rex" breed="Pitbull" />
         {/* Contador */}
         <Counter />
-        <br /><br />
+        <br />
+        <br />
         <TrafficLight />
-        <br /><br />
+        <br />
+        <br />
         <Form />
+        <br />
+        {/* Passando a lista de tarefas por PROPS*/}
+        <TaskList
+          taskTitle="Lista de tarefas"
+          tasks={[
+            {
+              id: 1,
+              text: "Estudar React",
+            },
+            {
+              id: 2,
+              text: "Pagar os boletos",
+            },
+            {
+              id: 3,
+              text: "Retirar o lixo",
+            },
+            {
+              id: 4,
+              text: "Lavar roupa",
+            },
+          ]}
+        />
+        <br />
+        <br />
+        <br />
+        <br />
       </main>
     </>
   );
