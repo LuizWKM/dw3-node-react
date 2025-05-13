@@ -48,7 +48,7 @@ class gameService {
   // Função para alterar jogos
   async Update(id, title, year, price, descriptions) {
     try {
-      const  updatedGame = await Game.findByIdAndUpdate(id, {
+      const updatedGame = await Game.findByIdAndUpdate(id, {
         // title : title
         title,
         year,

@@ -1,32 +1,33 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import styles from "@/components/EditContent/EditContent.module.css";
-import axios from "axios";
-
+import axios from "axios"
+import { axiosConfig } from '@/services/auth'
 
 const EditContent = ({ onClose, game, handleUpdate }) => {
-   // Criando os estados para as informações do jogo
-   const [id, setId] = useState("");
-   const [title, setTitle] = useState("");
-   const [platform, setPlatform] = useState("");
-   const [genre, setGenre] = useState("");
-   const [rating, setRating] = useState("");
-   const [year, setYear] = useState("");
-   const [price, setPrice] = useState("");
-   // Efeito colateral
-   useEffect(() => {
-    if (game) {
-      setId(game._id)
-      setTitle(game.title)
-      setPlatform(game.descriptions.platform)
-      setGenre(game.descriptions.genre)
-      setRating(game.descriptions.rating)
-      setYear(game.year)
-      setPrice(game.price)
-    }
-   }, [game]) // Depêndencia é o que faz o useEffect ser executado novamente
+  // Criando os estados para as informações do jogo
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [genre, setGenre] = useState("");
+  const [rating, setRating] = useState("");
+  const [year, setYear] = useState("");
+  const [price, setPrice] = useState("");
 
-   // Função para tratar submissão do formulário
-   const handleSubmit = async (e) => {
+  // Efeito colateral
+  useEffect(() => {
+    if (game) {
+      setId(game._id);
+      setTitle(game.title);
+      setPlatform(game.descriptions.platform);
+      setGenre(game.descriptions.genre);
+      setRating(game.descriptions.rating);
+      setYear(game.year);
+      setPrice(game.price);
+    }
+  }, [game]); // Depência é o que faz o useEffect ser executado novamente
+
+  // Função para tratar submissão do formulário
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const updatedGame = {
@@ -36,24 +37,25 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
       descriptions: {
         platform,
         genre,
-        rating
+        rating,
       },
     };
-
     // Enviando para API
-   try{
-    const response = await axios.put(`http://localhost:4000/games/${id}`, updatedGame);
-    if (response.status === 200) {
-      alert("O jogo foi alterado com sucesso!");
-      // Passa o jogo atualizado para a função handleUpdate para atualizar o estado
-      handleUpdate(response.data.game)
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/games/${id}`,
+        updatedGame,
+        axiosConfig
+      );
+      if (response.status === 200) {
+        alert("O jogo foi alterado com sucesso!");
+        // Passa o jogo atualizado para a função handleUpdate para atualizar o estado
+        handleUpdate(response.data.game)
+      }
+    } catch (error) {
+      console.log(error);
     }
-   } catch (error) {
-    console.log(error)
-   }
-   };
-
-   
+  };
 
   return (
     <>
@@ -68,7 +70,7 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
             <h2>Editar jogo</h2>
           </div>
           <form id="editForm" onSubmit={handleSubmit}>
-            <input type="hidden" name="id" value={id}/>
+            <input type="hidden" name="id" value={id} />
             <input
               type="text"
               name="title"
@@ -86,7 +88,6 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
               required
               value={platform}
               onChange={(e) => setPlatform(e.target.value)}
-
             />
             <input
               type="text"
@@ -96,7 +97,6 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
               required
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
-
             />
             <input
               type="text"
@@ -106,7 +106,6 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
               required
               value={rating}
               onChange={(e) => setRating(e.target.value)}
-
             />
             <input
               type="number"
@@ -116,7 +115,6 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
               required
               value={year}
               onChange={(e) => setYear(e.target.value)}
-
             />
             <input
               type="text"
@@ -126,7 +124,6 @@ const EditContent = ({ onClose, game, handleUpdate }) => {
               required
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-
             />
             <input type="submit" value="Alterar" className="btnPrimary" />
           </form>
